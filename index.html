@@ -56,7 +56,7 @@
     //Form event listener on Submit
     entryForm.addEventListener("submit", function(event) {
       const mainUrl = this.querySelector('#url').value;
-
+      const tok = this.querySelector('#token').value;
       if (!entryForm.checkValidity()) {
         event.preventDefault();
 
@@ -64,7 +64,7 @@
         event.preventDefault();
 
         //Calls function that will handle GitHub API connection
-        httpConnect(this);
+        httpConnect(this, tok);
         entryForm.classList.add("was-validated");
       }
 
@@ -72,7 +72,7 @@
   }, false)
 
   //Connects to GitHub API and posts the object with form values
-  function httpConnect(form) {
+  function httpConnect(form, tok) {
     const entry = createIssueObj(form);
     const httpRequest = new XMLHttpRequest();
     const successMessage = document.querySelector('.form-success')
@@ -82,7 +82,7 @@
     }
 
     httpRequest.onreadystatechange = createGitIssue;
-    httpRequest.open('POST', 'https://api.github.com/repos/gkiar/reading/issues?access_token=###'); //Replace '###' with GitHub Personal Token
+    httpRequest.open('POST', 'https://api.github.com/repos/gkiar/reading/issues?access_token='+ tok); // ###'); //Replace '###' with GitHub Personal Token
     httpRequest.setRequestHeader('Accept', 'application/vnd.github.v3.raw+json');
     httpRequest.send(JSON.stringify(entry));
 
@@ -136,6 +136,10 @@
       <div class="form-group">
          <label for="mainurl">URL *</label>
          <input type="url" class="form-control" id="url" placeholder="URL" required>
+      </div>
+      <div class="form-group">
+         <label for="token">API Token</label>
+         <input type="text" class="form-control" id="token" placeholder="Token" required>
       </div>
       <div class="form-group">
          <label for="does">Does</label>
