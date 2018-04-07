@@ -35,7 +35,7 @@
 
   var $mymodal= $('<div class="modal fade" id="readingModal" style="width:100%; height:100%;"><div id="readerShell" style="position:absolute; right:0; width:40%; padding: 10px;"><div id="readerContent" style="background-color: rgba(255, 255, 255, 0.95); padding:20px; border-radius: 10px; overflow: visible; overflow-y: visible !important;"></div></div></div>');
   $('body').append($mymodal);
-  $('#readerContent').load('http://gkiar.github.io/results/index.html #mainform');
+  $('#readerContent').load('http://gkiar.github.io/reading/index.html #mainform');
   $('#readingModal').modal({backdrop: true, focus: true, show: true})
 
   $('#readingModal').on('hidden.bs.modal', function () {
