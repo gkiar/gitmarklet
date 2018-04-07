@@ -90,6 +90,7 @@
       if (httpRequest.readyState === XMLHttpRequest.DONE) {
         if (httpRequest.status === 201) {
           form.reset();
+          document.getElementById("issuelink").href = JSON.parse(httpRequest.response).html_url;
           successMessage.classList.remove("hidden");
         } else {
           alert('There was a problem sending the form.');
@@ -115,9 +116,9 @@
 
     issueObj.title = "Paper: " + paper.value;
     issueObj.body = "URL: ["+ url.value +"](" + url.value + ") \n" +
-                    "## Does \n\n" + doesText.value + "\n" +
-                    "## Doesn't \n\n" + doesntText.value + "\n" +
-                    "## Notes \n\n" + notes.value + "\n";
+                    "## This paper does... \n\n" + doesText.value + "\n" +
+                    "## This paper does not... \n\n" + doesntText.value + "\n" +
+                    "## Other comments? \n\n" + notes.value + "\n";
     issueObj.labels = taglist
     console.log(issueObj)
     return issueObj;
@@ -126,35 +127,35 @@
 </script>
   </div>
   <div class="row entry-form">
-   <h3>Submit a new paper</h3>
-   <p class="form-success bg-success hidden">Form submitted successfully!</p>
+   <h3>Paper Index</h3>
+   <p class="form-success bg-success hidden">Form submitted successfully! See your notes <a id="issuelink" target="_blank" href="#">here</a>.</p>
    <form id="needs-validation">
       <div class="form-group">
-         <label for="paper-name">Paper name</label>
-         <input type="text" class="form-control" id="paper-name" placeholder="Name" required>
+         <label for="paper-name">Paper title</label>
+         <input type="text" class="form-control" id="paper-name" placeholder="Title or shorthand identifier" required>
       </div>
       <div class="form-group">
          <label for="mainurl">URL *</label>
-         <input type="url" class="form-control" id="url" placeholder="URL" required>
+         <input type="url" class="form-control" id="url" placeholder="Link to paper or citation" required>
       </div>
       <div class="form-group">
          <label for="token">API Token</label>
-         <input type="text" class="form-control" id="token" placeholder="Token" required>
+         <input type="text" class="form-control" id="token" placeholder="OAuth Github API token" required>
       </div>
       <div class="form-group">
-         <label for="does">Does</label>
-         <input type="text" class="form-control" id="does" placeholder="This paper does..." required>
+         <label for="does">This paper does...</label>
+         <input type="text" class="form-control" id="does" placeholder="... state/claim/demonstrate/produce/etc...">
       </div>
       <div class="form-group">
-         <label for="doesnt">Doesn't</label>
-         <input type="text" class="form-control" id="doesnt" placeholder="This paper does not..." required>
+         <label for="doesnt">This paper does not...</label>
+         <input type="text" class="form-control" id="doesnt" placeholder="... address/consider/apply to/etc...">
       </div>
       <div class="form-group">
-         <label for="notes">Notes</label>
-         <input type="text" class="form-control" id="notes" placeholder="Additional notes?">
+         <label for="notes">Additional notes?</label>
+         <input type="text" class="form-control" id="notes" placeholder="Extra noteworthy details">
       </div>
       <div class="form-group">
-         <label for="tags">Tags</label>
+         <label for="tags">Tags</label><br/>
          <select class="form-group selectpicker" id="tags" multiple>
            <option>to read</option>
            <option>stats</option>
@@ -165,7 +166,7 @@
            <option>reproducibility</option>
          </select>
       </div>
-      <button type="submit" class="btn btn-info">Create issue</button>
+      <button type="submit" class="btn btn-info">Index Reference</button>
    </form>
 </div>
 </body>
