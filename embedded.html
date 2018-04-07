@@ -50,7 +50,10 @@
 
 <body>
 <script>
-  $('#formbin').load('./index.html #mainform');
+  function embedReader(){
+    $('#formbin').load('./index.html #mainform');
+  };
+  window.onload = embedReader;
 </script>
  <div id="formbin">
  </div>
