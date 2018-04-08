@@ -1,25 +1,14 @@
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-  <title>Greg's Reading List</title>
+  <title>Github Reading List</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.3/js/tether.min.js"></script>
-
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-<!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
-
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
-
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
 <style type="text/css">
   .entry-form{
     padding:40px;
@@ -46,8 +35,8 @@
 </style>
 </head>
 
-<body>
-  <script>
+<body style="background-color:rgba(1,1,1,0) !important">
+<script>
   //Create issue form handler
   window.addEventListener("load", function() {
 
@@ -120,57 +109,55 @@
                     "## This paper does not... \n\n" + doesntText.value + "\n" +
                     "## Other comments? \n\n" + notes.value + "\n";
     issueObj.labels = taglist
-    console.log(issueObj)
     return issueObj;
   }
 </script>
 <div class="row entry-form">
-  <div id="mainform">
-    <h3>Paper Index</h3>
-    <p class="form-success bg-success hidden">Form submitted successfully! See your notes <a id="issuelink" target="_blank" href="#">here</a>.</p>
-    <form id="needs-validation">
-      <div class="form-group">
-         <label for="paper-name">Paper title</label>
-         <input type="text" class="form-control" id="paper-name" placeholder="Title or shorthand identifier" required>
+<div id="mainform">
+  <h3>Github Paper Index</h3>
+  <p class="form-success bg-success hidden">Form submitted successfully! See your notes <a id="issuelink" target="_blank" href="#">here</a>.</p>
+  <form id="needs-validation">
+    <div class="form-group">
+      <label for="paper-name">Paper title</label>
+      <input type="text" class="form-control" id="paper-name" placeholder="Title or shorthand identifier" required>
+    </div>
+    <div class="form-group">
+      <label for="mainurl">URL *</label>
+      <input type="url" class="form-control" id="url" placeholder="Link to paper or citation" required>
+    </div>
+    <div class="form-group">
+      <label for="token">API Token</label>
+      <input type="text" class="form-control" id="token" placeholder="OAuth Github API token" required>
+    </div>
+    <div class="form-group">
+      <label for="does">This paper does...</label>
+      <input type="text" class="form-control" id="does" placeholder="... state/claim/demonstrate/produce/etc...">
+    </div>
+    <div class="form-group">
+      <label for="doesnt">This paper does not...</label>
+      <input type="text" class="form-control" id="doesnt" placeholder="... address/consider/apply to/etc...">
+    </div>
+    <div class="form-group">
+      <label for="notes">Additional notes?</label>
+      <input type="text" class="form-control" id="notes" placeholder="Extra noteworthy details">
+    </div>
+    <div class="form-group">
+      <label for="tags">Tags</label>
+      <div>
+        <select class="form-group selectpicker" id="tags" multiple>
+          <option>to read</option>
+          <option>stats</option>
+          <option>imaging</option>
+          <option>neuroscience</option>
+          <option>processing</option>
+          <option>data/metadata</option>
+          <option>reproducibility</option>
+        </select>
       </div>
-      <div class="form-group">
-         <label for="mainurl">URL *</label>
-         <input type="url" class="form-control" id="url" placeholder="Link to paper or citation" required>
-      </div>
-      <div class="form-group">
-         <label for="token">API Token</label>
-         <input type="text" class="form-control" id="token" placeholder="OAuth Github API token" required>
-      </div>
-      <div class="form-group">
-         <label for="does">This paper does...</label>
-         <input type="text" class="form-control" id="does" placeholder="... state/claim/demonstrate/produce/etc...">
-      </div>
-      <div class="form-group">
-         <label for="doesnt">This paper does not...</label>
-         <input type="text" class="form-control" id="doesnt" placeholder="... address/consider/apply to/etc...">
-      </div>
-      <div class="form-group">
-         <label for="notes">Additional notes?</label>
-         <input type="text" class="form-control" id="notes" placeholder="Extra noteworthy details">
-      </div>
-      <div class="form-group">
-         <label for="tags">Tags</label>
-          <div>
-         <select class="form-group selectpicker" id="tags" multiple>
-           <option>to read</option>
-           <option>stats</option>
-           <option>imaging</option>
-           <option>neuroscience</option>
-           <option>processing</option>
-           <option>data/metadata</option>
-           <option>reproducibility</option>
-         </select>
-          </div>
-      </div>
-      <button type="submit" class="btn btn-info">Index Reference</button>
-   </form>
-  </div>
-  <p><em>Psst! Bookmark <a href="javascript: (function () {var jsCode = document.createElement('script');jsCode.setAttribute('src', 'https://gkiar.github.io/reading/bookmarklet.js');document.body.appendChild(jsCode);}());">this link</a> to load this page as an overlay, anywhere!</em></p>
+    </div>
+    <button type="submit" class="btn btn-info">Index Reference</button>
+  </form>
+</div>
 </div>
 </body>
 </html>
