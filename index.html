@@ -89,6 +89,7 @@
       if (httpRequest.readyState === XMLHttpRequest.DONE) {
         if (httpRequest.status === 201) {
           form.reset();
+          $('.selectpicker').selectpicker('refresh');
           document.getElementById("issuelink").href = JSON.parse(httpRequest.response).html_url;
           successMessage.classList.remove("hidden");
         } else {
@@ -108,10 +109,10 @@
       url = form.querySelector('#url'),
       taglist_ = form.querySelector('#tags')
 
-      taglist = []
-      for (var i=0; i < taglist_.selectedOptions.length; i++) {
-         taglist = taglist.concat(taglist_.selectedOptions[i].label)
-      }
+    taglist = []
+    for (var i=0; i < taglist_.selectedOptions.length; i++) {
+      taglist = taglist.concat(taglist_.selectedOptions[i].label)
+    }
 
     issueObj.title = "Paper: " + paper.value;
     issueObj.body = "URL: ["+ url.value +"](" + url.value + ") \n" +
@@ -169,7 +170,7 @@
       <button type="submit" class="btn btn-info">Index Reference</button>
    </form>
   </div>
-  <p><em>Psst! Bookmark <a href="javascript: (function () {var jsCode = document.createElement('script');jsCode.setAttribute('src', './bookmarklet.js');document.body.appendChild(jsCode);}());">this link</a> to load this page as an overlay, anywhere!</em></p>
+  <p><em>Psst! Bookmark <a href="javascript: (function () {var jsCode = document.createElement('script');jsCode.setAttribute('src', 'https://gkiar.github.io/reading/bookmarklet.js');document.body.appendChild(jsCode);}());">this link</a> to load this page as an overlay, anywhere!</em></p>
 </div>
 </body>
 </html>

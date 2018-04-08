@@ -20,8 +20,6 @@
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
 
-<script src="https://gkiar.github.io/reading/readingForm.js"></script>
-
 <style type="text/css">
   .entry-form{
     padding:40px;
@@ -47,15 +45,127 @@
   }
 </style>
 </head>
-
-<body>
+<body style="background-color:rgba(1,1,1,0) !important">
 <script>
-  function embedReader(){
-    $('#formbin').load('./index.html #mainform');
-  };
-  window.onload = embedReader;
+  //Create issue form handler
+  window.addEventListener("load", function() {
+
+    const entryForm = document.getElementById('needs-validation');
+    //Form event listener on Submit
+    entryForm.addEventListener("submit", function(event) {
+      const mainUrl = this.querySelector('#url').value;
+      const tok = this.querySelector('#token').value;
+      if (!entryForm.checkValidity()) {
+        event.preventDefault();
+
+      } else {
+        event.preventDefault();
+
+        //Calls function that will handle GitHub API connection
+        httpConnect(this, tok);
+        entryForm.classList.add("was-validated");
+      }
+
+    }, false)
+  }, false)
+
+  //Connects to GitHub API and posts the object with form values
+  function httpConnect(form, tok) {
+    const entry = createIssueObj(form);
+    const httpRequest = new XMLHttpRequest();
+    const successMessage = document.querySelector('.form-success')
+
+    if (!httpRequest) {
+      return false;
+    }
+
+    httpRequest.onreadystatechange = createGitIssue;
+    httpRequest.open('POST', 'https://api.github.com/repos/gkiar/reading/issues?access_token='+ tok); // ###'); //Replace '###' with GitHub Personal Token
+    httpRequest.setRequestHeader('Accept', 'application/vnd.github.v3.raw+json');
+    httpRequest.send(JSON.stringify(entry));
+
+    function createGitIssue() {
+      if (httpRequest.readyState === XMLHttpRequest.DONE) {
+        if (httpRequest.status === 201) {
+          form.reset();
+          $('.selectpicker').selectpicker('refresh');
+          document.getElementById("issuelink").href = JSON.parse(httpRequest.response).html_url;
+          successMessage.classList.remove("hidden");
+        } else {
+          alert('There was a problem sending the form.');
+        }
+      }
+    }
+  }
+
+  //Gets values from the form and creates an Object with them
+  function createIssueObj(form) {
+    var issueObj = {},
+      paper = form.querySelector('#paper-name'),
+      doesText = form.querySelector('#does'),
+      doesntText = form.querySelector('#doesnt'),
+      notes = form.querySelector('#notes'),
+      url = form.querySelector('#url'),
+      taglist_ = form.querySelector('#tags')
+
+    taglist = []
+    for (var i=0; i < taglist_.selectedOptions.length; i++) {
+      taglist = taglist.concat(taglist_.selectedOptions[i].label)
+    }
+
+    issueObj.title = "Paper: " + paper.value;
+    issueObj.body = "URL: ["+ url.value +"](" + url.value + ") \n" +
+                    "## This paper does... \n\n" + doesText.value + "\n" +
+                    "## This paper does not... \n\n" + doesntText.value + "\n" +
+                    "## Other comments? \n\n" + notes.value + "\n";
+    issueObj.labels = taglist
+    return issueObj;
+  }
 </script>
- <div id="formbin">
- </div>
+<div id="mainform">
+  <h3>Github Paper Index</h3>
+  <p class="form-success bg-success hidden">Form submitted successfully! See your notes <a id="issuelink" target="_blank" href="#">here</a>.</p>
+  <form id="needs-validation">
+    <div class="form-group">
+      <label for="paper-name">Paper title</label>
+      <input type="text" class="form-control" id="paper-name" placeholder="Title or shorthand identifier" required>
+    </div>
+    <div class="form-group">
+      <label for="mainurl">URL *</label>
+      <input type="url" class="form-control" id="url" placeholder="Link to paper or citation" required>
+    </div>
+    <div class="form-group">
+      <label for="token">API Token</label>
+      <input type="text" class="form-control" id="token" placeholder="OAuth Github API token" required>
+    </div>
+    <div class="form-group">
+      <label for="does">This paper does...</label>
+      <input type="text" class="form-control" id="does" placeholder="... state/claim/demonstrate/produce/etc...">
+    </div>
+    <div class="form-group">
+      <label for="doesnt">This paper does not...</label>
+      <input type="text" class="form-control" id="doesnt" placeholder="... address/consider/apply to/etc...">
+    </div>
+    <div class="form-group">
+      <label for="notes">Additional notes?</label>
+      <input type="text" class="form-control" id="notes" placeholder="Extra noteworthy details">
+    </div>
+    <div class="form-group">
+      <label for="tags">Tags</label>
+      <div>
+        <select class="form-group selectpicker" id="tags" multiple>
+          <option>to read</option>
+          <option>stats</option>
+          <option>imaging</option>
+          <option>neuroscience</option>
+          <option>processing</option>
+          <option>data/metadata</option>
+          <option>reproducibility</option>
+        </select>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-info">Index Reference</button>
+  </form>
+</div>
 </body>
 </html>
