@@ -45,9 +45,8 @@
   }
 </style>
 </head>
-
-<body>
-  <script>
+<body style="background-color:rgba(1,1,1,0) !important">
+<script>
   //Create issue form handler
   window.addEventListener("load", function() {
 
@@ -89,6 +88,7 @@
       if (httpRequest.readyState === XMLHttpRequest.DONE) {
         if (httpRequest.status === 201) {
           form.reset();
+          $('.selectpicker').selectpicker('refresh');
           document.getElementById("issuelink").href = JSON.parse(httpRequest.response).html_url;
           successMessage.classList.remove("hidden");
         } else {
@@ -108,10 +108,10 @@
       url = form.querySelector('#url'),
       taglist_ = form.querySelector('#tags')
 
-      taglist = []
-      for (var i=0; i < taglist_.selectedOptions.length; i++) {
-         taglist = taglist.concat(taglist_.selectedOptions[i].label)
-      }
+    taglist = []
+    for (var i=0; i < taglist_.selectedOptions.length; i++) {
+      taglist = taglist.concat(taglist_.selectedOptions[i].label)
+    }
 
     issueObj.title = "Paper: " + paper.value;
     issueObj.body = "URL: ["+ url.value +"](" + url.value + ") \n" +
@@ -119,56 +119,53 @@
                     "## This paper does not... \n\n" + doesntText.value + "\n" +
                     "## Other comments? \n\n" + notes.value + "\n";
     issueObj.labels = taglist
-    console.log(issueObj)
     return issueObj;
   }
 </script>
- <div id="mainform">
-   <h3>Paper Index</h3>
-   <p><em>Psst! Bookmark <a href="javascript: (function () {var jsCode = document.createElement('script');jsCode.setAttribute('src', 'http://gkiar.github.io/reading/bookmarklet.js');document.body.appendChild(jsCode);}());">this link</a> to load this page as an overlay, anywhere!</em></p>
-   <p><em>Psst! Bookmark <a href="javascript: (function () {var jsCode = document.createElement('script');jsCode.setAttribute('src', './bookmarklet.js');document.body.appendChild(jsCode);}());">this link</a> to load this page as an overlay, anywhere!</em></p>
-   <p class="form-success bg-success hidden">Form submitted successfully! See your notes <a id="issuelink" target="_blank" href="#">here</a>.</p>
-   <form id="needs-validation">
-      <div class="form-group">
-         <label for="paper-name">Paper title</label>
-         <input type="text" class="form-control" id="paper-name" placeholder="Title or shorthand identifier" required>
+<div id="mainform">
+  <h3>Github Paper Index</h3>
+  <p class="form-success bg-success hidden">Form submitted successfully! See your notes <a id="issuelink" target="_blank" href="#">here</a>.</p>
+  <form id="needs-validation">
+    <div class="form-group">
+      <label for="paper-name">Paper title</label>
+      <input type="text" class="form-control" id="paper-name" placeholder="Title or shorthand identifier" required>
+    </div>
+    <div class="form-group">
+      <label for="mainurl">URL *</label>
+      <input type="url" class="form-control" id="url" placeholder="Link to paper or citation" required>
+    </div>
+    <div class="form-group">
+      <label for="token">API Token</label>
+      <input type="text" class="form-control" id="token" placeholder="OAuth Github API token" required>
+    </div>
+    <div class="form-group">
+      <label for="does">This paper does...</label>
+      <input type="text" class="form-control" id="does" placeholder="... state/claim/demonstrate/produce/etc...">
+    </div>
+    <div class="form-group">
+      <label for="doesnt">This paper does not...</label>
+      <input type="text" class="form-control" id="doesnt" placeholder="... address/consider/apply to/etc...">
+    </div>
+    <div class="form-group">
+      <label for="notes">Additional notes?</label>
+      <input type="text" class="form-control" id="notes" placeholder="Extra noteworthy details">
+    </div>
+    <div class="form-group">
+      <label for="tags">Tags</label>
+      <div>
+        <select class="form-group selectpicker" id="tags" multiple>
+          <option>to read</option>
+          <option>stats</option>
+          <option>imaging</option>
+          <option>neuroscience</option>
+          <option>processing</option>
+          <option>data/metadata</option>
+          <option>reproducibility</option>
+        </select>
       </div>
-      <div class="form-group">
-         <label for="mainurl">URL *</label>
-         <input type="url" class="form-control" id="url" placeholder="Link to paper or citation" required>
-      </div>
-      <div class="form-group">
-         <label for="token">API Token</label>
-         <input type="text" class="form-control" id="token" placeholder="OAuth Github API token" required>
-      </div>
-      <div class="form-group">
-         <label for="does">This paper does...</label>
-         <input type="text" class="form-control" id="does" placeholder="... state/claim/demonstrate/produce/etc...">
-      </div>
-      <div class="form-group">
-         <label for="doesnt">This paper does not...</label>
-         <input type="text" class="form-control" id="doesnt" placeholder="... address/consider/apply to/etc...">
-      </div>
-      <div class="form-group">
-         <label for="notes">Additional notes?</label>
-         <input type="text" class="form-control" id="notes" placeholder="Extra noteworthy details">
-      </div>
-      <div class="form-group">
-         <label for="tags">Tags</label>
-          <div>
-         <select class="form-group selectpicker" id="tags" multiple>
-           <option>to read</option>
-           <option>stats</option>
-           <option>imaging</option>
-           <option>neuroscience</option>
-           <option>processing</option>
-           <option>data/metadata</option>
-           <option>reproducibility</option>
-         </select>
-          </div>
-      </div>
-      <button type="submit" class="btn btn-info">Index Reference</button>
-   </form>
-  </div>
+    </div>
+    <button type="submit" class="btn btn-info">Index Reference</button>
+  </form>
+</div>
 </body>
 </html>
