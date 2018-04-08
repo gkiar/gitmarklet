@@ -29,8 +29,8 @@
     $('#readingModal').modal({backdrop: true, focus: true, show: true})
     $('#readingModal').on('hidden.bs.modal', function () {
       $("script[id='reader-script']").remove()
-      $("div[id='readingModal']").remove()
       $("iframe[id='readerContent']").remove()
+      $("div[id='readingModal']").remove()
     });
   };
 
@@ -38,11 +38,21 @@
   // window.setTimeout(loadBS, 800)
   // window.setTimeout(createBookmarklet(), 1000);
 
-  document.body.innerHTML += '<div id="readerShell" style="position:absolute; top:20px; right:20px; border-radius:10px; background-color:rgba(240,240,240,0.95);"><button type="button" class="close" id="readerClose" aria-label="Close" style="position:relative; top:10px; right:10px"><span aria-hidden="true">&times;</span></button><iframe id="readerContent" src="https://gkiar.me/reading/embedded.html" width=100% height=650px style="border:none; padding:0 30 0 30px"></iframe></div>'
-  const closer = document.getElementById("readerClose")
-  closer.addEventListener("click", function(event) {
-    document.getElementById("readerContent").remove()
-    document.getElementById("readerClose").remove()
-    document.getElementById("readerShell").remove()
+  document.body.innerHTML += '<div id="readerShell" style="position:fixed; padding: 15 5px; top:20px; right:20px; border-radius:10px; background-color:rgba(240,240,240,0.95);"><iframe id="readerContent" src="https://gkiar.me/reading/embedded.html" width=100% height=600px style="border:none; padding:0 20px"></iframe></div>'
+
+  var iframeObject = document.getElementById("readerContent");
+  iframeObject.addEventListener("load", function(){
+    iframer = this.ContentDocument
+    if (iframer == null) {
+      iframer = this.contentWindow.document;
+    }
+    console.log(iframer)
+
+    var closer = iframer.getElementById("readerClose")
+    closer.addEventListener("click", function(event) {
+      document.getElementById("readerContent").remove()
+      document.getElementById("readerShell").remove()
+      document.getElementById("readerClose").remove()
+    });
   });
 }());
