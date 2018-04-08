@@ -19,14 +19,13 @@
   sc_bs2.src = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js";
   document.body.appendChild(sc_bs2);
 
-  $('window').on('load', function(){
-    $('body').prepend('<div class="modal fade" id="readingModal" style="width:100%; height:100%;"><div id="readerShell" style="position:absolute; right:0; min-width:40%; padding: 10px;"><iframe id="readerContent" src="https://gkiar.me/reading/embedded.html" style="background-color: rgba(255, 255, 255, 0.95); padding:20px; border-radius: 10px; overflow: unset;" width=100% height=675px></iframe></div></div>');
+  $('body').prepend('<div class="modal fade" id="readingModal" style="width:100%; height:100%;"><div id="readerShell" style="position:absolute; right:0; min-width:40%; padding: 10px;"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><iframe id="readerContent" src="https://gkiar.me/reading/embedded.html" style="background-color: rgba(255, 255, 255, 0.95); padding:20px; border-radius: 10px; overflow: unset;" width=100% height=675px></iframe></div></div>');
 
-    $('#readingModal').modal({backdrop: true, focus: true, show: true})
-    $('#readingModal').on('hidden.bs.modal', function () {
-      $("script[id='reader-script']").remove()
-      $("div[id='readingModal']").remove()
-    });
+  $('#readingModal').modal({backdrop: true, focus: true, show: true})
+  $('#readingModal').on('hidden.bs.modal', function () {
+    $("script[id='reader-script']").remove()
+    $("div[id='readingModal']").remove()
+    $("iframe[id='readerContent']").remove()
   });
 }());
 
