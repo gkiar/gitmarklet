@@ -24,7 +24,7 @@
   };
 
   function createBookmarklet() {
-    $('body').append('<div class="modal fade" id="readingModal" style="width:100%; height:100%;"><div id="readerShell" style="position:absolute; right:0; min-width:40%; padding: 10px; background-colour: rgba(1,1,1,0.95)"><button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position:relative; top:30px; right:15px"><span aria-hidden="true">&times;</span></button><iframe id="readerContent" src="https://gkiar.me/reading/embedded.html" style="background-color: rgba(255, 255, 255, 0.95); padding:20px; border-radius: 10px; overflow: unset;" width=100% height=675px></iframe></div></div>');
+    $('body').append('<div class="modal fade" id="readingModal" style="width:100%; height:100%; position: absolute; top: 20px; right: 20px"><div id="readerShell" style="position:absolute; right:0; min-width:40%; padding: 20px; background-colour: rgba(1,1,1,0.95); border-radius: 10px"><button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position:relative; top:30px; right:15px"><span aria-hidden="true">&times;</span></button><iframe id="readerContent" src="https://gkiar.me/reading/embedded.html" style="overflow: unset;" width=100% height=675px></iframe></div></div>');
 
     $('#readingModal').modal({backdrop: true, focus: true, show: true})
     $('#readingModal').on('hidden.bs.modal', function () {
@@ -34,7 +34,15 @@
     });
   };
 
-  loadJQ()
-  window.setTimeout(loadBS, 300)
-  window.setTimeout(createBookmarklet(), 200);
+  // loadJQ()
+  // window.setTimeout(loadBS, 800)
+  // window.setTimeout(createBookmarklet(), 1000);
+
+  document.body.innerHTML += '<div id="readerShell" style="position:absolute; top:20px; right:20px; border-radius:10px; background-color:rgba(240,240,240,0.95);"><button type="button" class="close" id="readerClose" aria-label="Close" style="position:relative; top:10px; right:10px"><span aria-hidden="true">&times;</span></button><iframe id="readerContent" src="https://gkiar.me/reading/embedded.html" width=100% height=650px style="border:none; padding:0 30 0 30px"></iframe></div>'
+  const closer = document.getElementById("readerClose")
+  closer.addEventListener("click", function(event) {
+    document.getElementById("readerContent").remove()
+    document.getElementById("readerClose").remove()
+    document.getElementById("readerShell").remove()
+  });
 }());
