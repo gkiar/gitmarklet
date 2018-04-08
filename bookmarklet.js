@@ -40,8 +40,7 @@
   document.body.appendChild(sc5);
 
   //var $mymodal= $('<div class="modal fade" id="readingModal" style="width:100%; height:100%;"><div id="readerShell" style="position:absolute; right:0; width:40%; padding: 10px;"><div id="readerContent" style="background-color: rgba(255, 255, 255, 0.95); padding:20px; border-radius: 10px;"></div></div></div>');
-  var $mymodal= $('<div class="modal fade" id="readingModal" style="width:100%; height:100%;"><div id="readerShell" style="position:absolute; right:0; min-width:40%; padding: 10px;"><iframe id="readerContent" src="https://gkiar.github.io/reading/embedded.html" style="background-color: rgba(255, 255, 255, 0.95); padding:20px; border-radius: 10px; overflow: unset;" width=100% height=675px></iframe></div></div>');
-  $('body').append($mymodal);
+  $('body').append('<div class="modal fade" id="readingModal" style="width:100%; height:100%;"><div id="readerShell" style="position:absolute; right:0; min-width:40%; padding: 10px;"><iframe id="readerContent" src="https://gkiar.github.io/reading/embedded.html" style="background-color: rgba(255, 255, 255, 0.95); padding:20px; border-radius: 10px; overflow: unset;" width=100% height=675px></iframe></div></div>');
   //$('#readerContent').load('./index.html #mainform');
 
   // $('iframe').on('load', function() {
