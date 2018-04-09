@@ -40,6 +40,10 @@
   window.addEventListener("load", function() {
 
     const entryForm = document.getElementById('needs-validation');
+
+    document.getElementById('paper-name').value = getParameterByName('name')
+    document.getElementById('url').value = getParameterByName('url')
+
     //Form event listener on Submit
     entryForm.addEventListener("submit", function(event) {
       const mainUrl = this.querySelector('#url').value;
@@ -109,6 +113,16 @@
                     "## Other comments? \n\n" + notes.value + "\n";
     issueObj.labels = taglist
     return issueObj;
+  }
+
+  function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
   }
 </script>
 <div id="mainform" style="padding:10 20 0 20px">
