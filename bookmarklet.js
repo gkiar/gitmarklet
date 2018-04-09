@@ -7,6 +7,12 @@
 
   var iframeObject = document.getElementById("readerContent-"+idnum);
   iframeObject.addEventListener("load", function(){
+    var closer = document.getElementById("readerClose-"+idnum)
+    closer.addEventListener("click", function(event) {
+      document.getElementById("readerContent-"+idnum).remove()
+      document.getElementById("readerShell-"+idnum).remove()
+    });
+
     iframer = this.ContentDocument
     if (iframer == null) {
       iframer = this.contentWindow.document;
@@ -14,11 +20,5 @@
 
     iframer.getElementById('url').value = window.location.href
     iframer.getElementById('paper-name').value = window.document.title
-
-    var closer = document.getElementById("readerClose-"+idnum)
-    closer.addEventListener("click", function(event) {
-      document.getElementById("readerContent-"+idnum).remove()
-      document.getElementById("readerShell-"+idnum).remove()
-    });
   });
 }());
