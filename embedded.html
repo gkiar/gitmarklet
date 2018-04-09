@@ -111,9 +111,8 @@
     return issueObj;
   }
 </script>
-<div id="mainform">
+<div id="mainform" style="padding:10 20 0 20px">
   <h3 style="display:inline">Github Paper Index</h3> 
-  <button type="button" class="close" id="readerClose" aria-label="Close" style="position:relative; right:10px"><span aria-hidden="true">&times;</span></button>
   <p class="form-success bg-success hidden">Form submitted successfully! See your notes <a id="issuelink" target="_blank" href="#">here</a>.</p>
   <form id="needs-validation">
     <div class="form-group">
@@ -121,7 +120,7 @@
       <input type="text" class="form-control" id="paper-name" placeholder="Title or shorthand identifier" required>
     </div>
     <div class="form-group">
-      <label for="mainurl">URL *</label>
+      <label for="mainurl">URL</label>
       <input type="url" class="form-control" id="url" placeholder="Link to paper or citation" required>
     </div>
     <div class="form-group">
