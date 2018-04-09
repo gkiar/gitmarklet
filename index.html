@@ -58,12 +58,39 @@
 
     }, false)
 
+    // Update tags in form based on current repo
+    entryForm.querySelector('#repo').addEventListener("blur", function(event){
+      const httpRequest = new XMLHttpRequest();
+      httpRequest.onreadystatechange = updateLabelList;
+      httpRequest.open('GET', 'https://api.github.com/repos/'+ this.value +'/labels');
+      httpRequest.setRequestHeader('Accept', 'application/vnd.github.v3.raw+json');
+      httpRequest.send();
+
+      function updateLabelList() {
+        if (httpRequest.readyState === XMLHttpRequest.DONE) {
+          if (httpRequest.status === 200) {
+            optlist = []
+            tagresp = JSON.parse(httpRequest.response)
+            for (var i=0; i < tagresp.length; i++) {
+              optlist = optlist.concat('<option>'+tagresp[i].name+'</option>')
+            }
+            $('.selectpicker').html(optlist)
+            $('.selectpicker').selectpicker('refresh');
+          } else {
+            alert('There was a problem requesting tags from this repository');
+          }
+        }
+      }
+    });
+
     const bookmarkletForm = document.getElementById('bookmarklet-form');
     const bookmarkletButton = bookmarkletForm.querySelector('#button');
     bookmarkletButton.addEventListener("click", function(event) {
       const tok = bookmarkletForm.querySelector('#token').value;
-      bookmarklet_url = "javascript:(function () {var jsCode = document.createElement('script');jsCode.setAttribute('src', 'https://gkiar.me/reading/bookmarklet.js');jsCode.setAttribute('token', 'TOKEN');jsCode.setAttribute('id', 'readerBookmarklet');document.body.appendChild(jsCode);}());"
+      const repo = bookmarkletForm.querySelector('#repo').value;
+      bookmarklet_url = "javascript:(function () {var jsCode = document.createElement('script');jsCode.setAttribute('src', 'https://gkiar.me/reading/bookmarklet.js');jsCode.setAttribute('token', 'TOKEN');jsCode.setAttribute('repo', 'REPO');jsCode.setAttribute('id', 'readerBookmarklet');document.body.appendChild(jsCode);}());"
       bookmarklet_url = bookmarklet_url.replace(/TOKEN/, tok)
+      bookmarklet_url = bookmarklet_url.replace(/REPO/, repo)
       document.getElementById('bookmark-url').setAttribute('href', bookmarklet_url)
       document.getElementById('responseLink').classList.remove("hidden");
     })
@@ -73,15 +100,16 @@
   //Connects to GitHub API and posts the object with form values
   function httpConnect(form, tok) {
     const entry = createIssueObj(form);
+    const repo = form.querySelector('#repo').value;
     const httpRequest = new XMLHttpRequest();
-    const successMessage = document.querySelector('.form-success')
+    const successMessage = document.querySelector('.form-success');
 
     if (!httpRequest) {
       return false;
     }
 
     httpRequest.onreadystatechange = createGitIssue;
-    httpRequest.open('POST', 'https://api.github.com/repos/gkiar/reading/issues?access_token='+ tok); // ###'); //Replace '###' with GitHub Personal Token
+    httpRequest.open('POST', 'https://api.github.com/repos/'+ repo +'/issues?access_token='+ tok); // ###'); //Replace '###' with GitHub Personal Token
     httpRequest.setRequestHeader('Accept', 'application/vnd.github.v3.raw+json');
     httpRequest.send(JSON.stringify(entry));
 
@@ -137,6 +165,10 @@
       <input type="url" class="form-control" id="url" placeholder="Link to paper or citation" required>
     </div>
     <div class="form-group">
+      <label for="repo">Github Repository</label>
+      <input type="text" class="form-control" id="repo" placeholder="Target repository for opened issues" required>
+    </div>
+    <div class="form-group">
       <label for="token">API Token</label>
       <input type="text" class="form-control" id="token" placeholder="OAuth Github API token" required>
     </div>
@@ -156,13 +188,6 @@
       <label for="tags">Tags</label>
       <div>
         <select class="form-group selectpicker" id="tags" multiple>
-          <option>to read</option>
-          <option>stats</option>
-          <option>imaging</option>
-          <option>neuroscience</option>
-          <option>processing</option>
-          <option>data/metadata</option>
-          <option>reproducibility</option>
         </select>
       </div>
     </div>
@@ -171,12 +196,15 @@
 </div>
 <div>
   <hr />
-  <p><em>Psst! Enter your API key, and bookmark the link to load this as an overlay, anywhere!</em></p>
+  <p><em>Psst! Want to do this for your own repo? Enter your repository name and API key, generate your link, and bookmark it to load this as an overlay, anywhere!</em></p>
   <form id="bookmarklet-form" autocomplete="off">
-    <div style="display:inline" class="form-group">
-      <input style="display:inline; max-width:45%" type="text" class="form-control" id="token" placeholder="OAuth Github API token" required>
+    <div class="form-group">
+      <input type="text" class="form-control" id="repo" placeholder="Target Github repository" required>
     </div>
-    <button style="max-width:48%" type="button" id="button" class="btn btn-info">Generate Link</button>
+    <div class="form-group">
+      <input type="text" class="form-control" id="token" placeholder="OAuth Github API token" required>
+    </div>
+    <button type="button" id="button" class="btn btn-info">Generate Link</button>
   </form>
   <p id="responseLink" class="hidden">Bookmark <a id="bookmark-url" href="">this link</a>!</p>
 </div>

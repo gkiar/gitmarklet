@@ -43,6 +43,7 @@
 
     document.getElementById('paper-name').value = getParameterByName('name')
     document.getElementById('url').value = getParameterByName('url')
+    document.getElementById('repo').value = getParameterByName('repo')
     document.getElementById('token').value = getParameterByName('token')
 
     //Form event listener on Submit
@@ -61,20 +62,51 @@
       }
 
     }, false)
+
+    // Update tags in form based on current repo
+    entryForm.querySelector('#repo').addEventListener("blur", function(){
+      const httpRequest = new XMLHttpRequest();
+      httpRequest.onreadystatechange = updateLabelList;
+      httpRequest.open('GET', 'https://api.github.com/repos/'+ this.value +'/labels');
+      httpRequest.setRequestHeader('Accept', 'application/vnd.github.v3.raw+json');
+      httpRequest.send();
+
+      function updateLabelList() {
+        if (httpRequest.readyState === XMLHttpRequest.DONE) {
+          if (httpRequest.status === 200) {
+            optlist = []
+            tagresp = JSON.parse(httpRequest.response)
+            for (var i=0; i < tagresp.length; i++) {
+              optlist = optlist.concat('<option>'+tagresp[i].name+'</option>')
+            }
+            $('.selectpicker').html(optlist)
+            $('.selectpicker').selectpicker('refresh');
+          } else {
+            alert('There was a problem requesting tags from this repository');
+          }
+        }
+      }
+    });
+
+    if (entryForm.querySelector('#repo').value != '') {
+      entryForm.querySelector('#repo').dispatchEvent(new Event('blur'))
+    }
+
   }, false)
 
   //Connects to GitHub API and posts the object with form values
   function httpConnect(form, tok) {
     const entry = createIssueObj(form);
+    const repo = form.querySelector('#repo').value;
     const httpRequest = new XMLHttpRequest();
-    const successMessage = document.querySelector('.form-success')
+    const successMessage = document.querySelector('.form-success');
 
     if (!httpRequest) {
       return false;
     }
 
     httpRequest.onreadystatechange = createGitIssue;
-    httpRequest.open('POST', 'https://api.github.com/repos/gkiar/reading/issues?access_token='+ tok); // ###'); //Replace '###' with GitHub Personal Token
+    httpRequest.open('POST', 'https://api.github.com/repos/'+ repo +'/issues?access_token='+ tok); // ###'); //Replace '###' with GitHub Personal Token
     httpRequest.setRequestHeader('Accept', 'application/vnd.github.v3.raw+json');
     httpRequest.send(JSON.stringify(entry));
 
@@ -139,6 +171,10 @@
       <input type="url" class="form-control" id="url" placeholder="Link to paper or citation" required>
     </div>
     <div class="form-group">
+      <label for="repo">Github Repository</label>
+      <input type="text" class="form-control" id="repo" placeholder="Target repository for opened issues" required>
+    </div>
+    <div class="form-group">
       <label for="token">API Token</label>
       <input type="text" class="form-control" id="token" placeholder="OAuth Github API token" required>
     </div>
@@ -158,13 +194,6 @@
       <label for="tags">Tags</label>
       <div>
         <select class="form-group selectpicker" id="tags" multiple>
-          <option>to read</option>
-          <option>stats</option>
-          <option>imaging</option>
-          <option>neuroscience</option>
-          <option>processing</option>
-          <option>data/metadata</option>
-          <option>reproducibility</option>
         </select>
       </div>
     </div>
