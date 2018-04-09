@@ -57,6 +57,17 @@
       }
 
     }, false)
+
+    const bookmarkletForm = document.getElementById('bookmarklet-form');
+    const bookmarkletButton = bookmarkletForm.querySelector('#button');
+    bookmarkletButton.addEventListener("click", function(event) {
+      const tok = bookmarkletForm.querySelector('#token').value;
+      bookmarklet_url = "javascript:(function () {var jsCode = document.createElement('script');jsCode.setAttribute('src', 'https://gkiar.me/reading/bookmarklet.js');jsCode.setAttribute('token', 'TOKEN');jsCode.setAttribute('id', 'readerBookmarklet');document.body.appendChild(jsCode);}());"
+      bookmarklet_url = bookmarklet_url.replace(/TOKEN/, tok)
+      document.getElementById('bookmark-url').setAttribute('href', bookmarklet_url)
+      document.getElementById('responseLink').classList.remove("hidden");
+    })
+
   }, false)
 
   //Connects to GitHub API and posts the object with form values
@@ -155,10 +166,20 @@
         </select>
       </div>
     </div>
-    <button type="submit" class="btn btn-info">Index Reference</button>
+    <button type="submit" id="entry-submit" class="btn btn-info">Index Reference</button>
   </form>
 </div>
-<p><em>Psst! Bookmark <a href="javascript: (function () {var jsCode = document.createElement('script');jsCode.setAttribute('src', 'https://gkiar.me/reading/bookmarklet.js');document.body.appendChild(jsCode);}());">this link</a> to load this page as an overlay, anywhere!</em></p>
+<div>
+  <hr />
+  <p><em>Psst! Enter your API key, and bookmark the link to load this as an overlay, anywhere!</em></p>
+  <form id="bookmarklet-form">
+    <div style="display:inline" class="form-group">
+      <input style="display:inline; max-width:45%" type="text" class="form-control" id="token" placeholder="OAuth Github API token" required>
+    </div>
+    <button style="max-width:48%" type="button" id="button" class="btn btn-info">Generate Link</button>
+  </form>
+  <p id="responseLink" class="hidden">Bookmark <a id="bookmark-url" href="">this link</a>!</p>
+</div>
 </div>
 </body>
 </html>
