@@ -1,5 +1,42 @@
 # Reading
 
-Simple webform for creating structured and tagged Github issues.
+Simple webform for creating structured and tagged Github issues from arbitrary users to arbitrary repos.
 
-My particular use case is the indexing of scientific papers, though I see no reason why it need be restricted to that.
+## Instructions
+
+#### 1. Make and record a Github Token
+
+You can do this by following:
+
+> Top right menu > Settings > Developer Settings > Personal Access Tokens > Generate  new token
+
+
+#### 2. Go to [https://gkiar.github.io/reading](https://gkiar.github.io/reading)
+
+<img src="./doc/website_top.png" width="500px" />
+
+
+#### 3. Scroll down to the second form
+
+<img src="./doc/website_bottom_1.png" width="500px" />
+
+
+#### 4. Specify a repository of your choice and enter your Token, and hit submit
+
+<img src="./doc/website_bottom_2.png" width="500px" />
+
+
+#### 5. Copy the link that appeared to your clipboard
+
+<img src="./doc/website_bottom_3.png" width="500px" />
+
+
+#### 6. Create a new bookmark with your link
+
+<img src="./doc/bookmark.png" width="500px" />
+
+
+#### 7. When reading a paper you want to record, click the bookmark and submit your entry!
+
+![using the bookmarklet](./doc/usage.png)
+
