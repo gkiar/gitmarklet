@@ -40,6 +40,9 @@
   //Create issue form handler
   window.addEventListener("load", function() {
 
+    note_template = "### This paper does... \n\n### This paper does not...\n\n### Additional Notes?\n\n### Further Reading\n"
+    document.getElementById('notes').value = note_template
+
     const entryForm = document.getElementById('needs-validation');
     //Form event listener on Submit
     entryForm.addEventListener("submit", function(event) {
@@ -131,8 +134,6 @@
   function createIssueObj(form) {
     var issueObj = {},
       paper = form.querySelector('#paper-name'),
-      doesText = form.querySelector('#does'),
-      doesntText = form.querySelector('#doesnt'),
       notes = form.querySelector('#notes'),
       url = form.querySelector('#url'),
       taglist_ = form.querySelector('#tags')
@@ -144,9 +145,7 @@
 
     issueObj.title = "Paper: " + paper.value;
     issueObj.body = "URL: ["+ url.value +"](" + url.value + ") \n" +
-                    "## This paper does... \n\n" + doesText.value + "\n" +
-                    "## This paper does not... \n\n" + doesntText.value + "\n" +
-                    "## Other comments? \n\n" + notes.value + "\n";
+                    notes.value + "\n";
     issueObj.labels = taglist
     return issueObj;
   }
@@ -173,16 +172,8 @@
       <input type="text" class="form-control" id="token" placeholder="OAuth Github API token" required>
     </div>
     <div class="form-group">
-      <label for="does">This paper does...</label>
-      <input type="text" class="form-control" id="does" placeholder="... state/claim/demonstrate/produce/etc...">
-    </div>
-    <div class="form-group">
-      <label for="doesnt">This paper does not...</label>
-      <input type="text" class="form-control" id="doesnt" placeholder="... address/consider/apply to/etc...">
-    </div>
-    <div class="form-group">
-      <label for="notes">Additional notes?</label>
-      <input type="text" class="form-control" id="notes" placeholder="Extra noteworthy details">
+      <label for="notes">Notes</label>
+      <textarea class="form-control" rows="8" id="notes"></textarea>
     </div>
     <div class="form-group">
       <label for="tags">Tags</label>
