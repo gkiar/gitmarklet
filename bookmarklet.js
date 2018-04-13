@@ -13,7 +13,6 @@
 
   var iframeObject = document.getElementById("readerContent-"+idnum);
   iframeObject.addEventListener("load", function(){
-    this.height = this.contentWindow.document.body.scrollHeight;
     var closer = document.getElementById("readerClose-"+idnum)
     closer.addEventListener("click", function(event) {
       document.getElementById("readerContent-"+idnum).remove()
