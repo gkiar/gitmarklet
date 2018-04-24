@@ -25,7 +25,7 @@
 
   @media screen and (min-width: 740px){
     .entry-form{
-      width:50%;
+      width:60%;
     }
   }
 
@@ -39,53 +39,6 @@
 <script>
   //Create issue form handler
   window.addEventListener("load", function() {
-
-    note_template = "### This paper does... \n\n### This paper does not...\n\n### Additional Notes?\n\n### Further Reading\n"
-    document.getElementById('notes').value = note_template
-
-    const entryForm = document.getElementById('needs-validation');
-    //Form event listener on Submit
-    entryForm.addEventListener("submit", function(event) {
-      const mainUrl = this.querySelector('#url').value;
-      const tok = this.querySelector('#token').value;
-      if (!entryForm.checkValidity()) {
-        event.preventDefault();
-
-      } else {
-        event.preventDefault();
-
-        //Calls function that will handle GitHub API connection
-        httpConnect(this, tok);
-        entryForm.classList.add("was-validated");
-      }
-
-    }, false)
-
-    // Update tags in form based on current repo
-    entryForm.querySelector('#repo').addEventListener("blur", function(event){
-      const httpRequest = new XMLHttpRequest();
-      httpRequest.onreadystatechange = updateLabelList;
-      httpRequest.open('GET', 'https://api.github.com/repos/'+ this.value +'/labels');
-      httpRequest.setRequestHeader('Accept', 'application/vnd.github.v3.raw+json');
-      httpRequest.send();
-
-      function updateLabelList() {
-        if (httpRequest.readyState === XMLHttpRequest.DONE) {
-          if (httpRequest.status === 200) {
-            optlist = []
-            tagresp = JSON.parse(httpRequest.response)
-            for (var i=0; i < tagresp.length; i++) {
-              optlist = optlist.concat('<option>'+tagresp[i].name+'</option>')
-            }
-            $('.selectpicker').html(optlist)
-            $('.selectpicker').selectpicker('refresh');
-          } else {
-            alert('There was a problem requesting tags from this repository');
-          }
-        }
-      }
-    });
-
     const bookmarkletForm = document.getElementById('bookmarklet-form');
     const bookmarkletButton = bookmarkletForm.querySelector('#button');
     bookmarkletButton.addEventListener("click", function(event) {
@@ -99,92 +52,9 @@
     })
 
   }, false)
-
-  //Connects to GitHub API and posts the object with form values
-  function httpConnect(form, tok) {
-    const entry = createIssueObj(form);
-    const repo = form.querySelector('#repo').value;
-    const httpRequest = new XMLHttpRequest();
-    const successMessage = document.querySelector('.form-success');
-
-    if (!httpRequest) {
-      return false;
-    }
-
-    httpRequest.onreadystatechange = createGitIssue;
-    httpRequest.open('POST', 'https://api.github.com/repos/'+ repo +'/issues?access_token='+ tok); // ###'); //Replace '###' with GitHub Personal Token
-    httpRequest.setRequestHeader('Accept', 'application/vnd.github.v3.raw+json');
-    httpRequest.send(JSON.stringify(entry));
-
-    function createGitIssue() {
-      if (httpRequest.readyState === XMLHttpRequest.DONE) {
-        if (httpRequest.status === 201) {
-          form.reset();
-          $('.selectpicker').selectpicker('refresh');
-          document.getElementById("issuelink").href = JSON.parse(httpRequest.response).html_url;
-          successMessage.classList.remove("hidden");
-        } else {
-          alert('There was a problem sending the form.');
-        }
-      }
-    }
-  }
-
-  //Gets values from the form and creates an Object with them
-  function createIssueObj(form) {
-    var issueObj = {},
-      paper = form.querySelector('#paper-name'),
-      notes = form.querySelector('#notes'),
-      url = form.querySelector('#url'),
-      taglist_ = form.querySelector('#tags')
-
-    taglist = []
-    for (var i=0; i < taglist_.selectedOptions.length; i++) {
-      taglist = taglist.concat(taglist_.selectedOptions[i].label)
-    }
-
-    issueObj.title = "Paper: " + paper.value;
-    issueObj.body = "URL: ["+ url.value +"](" + url.value + ") \n" +
-                    notes.value + "\n";
-    issueObj.labels = taglist
-    return issueObj;
-  }
 </script>
 <div class="row entry-form">
-<div id="mainform">
-  <h3>Github Paper Index</h3>
-  <p class="form-success bg-success hidden">Form submitted successfully! See your notes <a id="issuelink" target="_blank" href="#">here</a>.</p>
-  <form id="needs-validation" autocomplete="off">
-    <div class="form-group">
-      <label for="paper-name">Paper title</label>
-      <input type="text" class="form-control" id="paper-name" placeholder="Title or shorthand identifier" required>
-    </div>
-    <div class="form-group">
-      <label for="mainurl">URL</label>
-      <input type="url" class="form-control" id="url" placeholder="Link to paper or citation" required>
-    </div>
-    <div class="form-group">
-      <label for="repo">Github Repository</label>
-      <input type="text" class="form-control" id="repo" placeholder="Target repository for opened issues" required>
-    </div>
-    <div class="form-group">
-      <label for="token">API Token</label>
-      <input type="text" class="form-control" id="token" placeholder="OAuth Github API token" required>
-    </div>
-    <div class="form-group">
-      <label for="notes">Notes</label>
-      <textarea class="form-control" rows="8" id="notes"></textarea>
-    </div>
-    <div class="form-group">
-      <label for="tags">Tags</label>
-      <div>
-        <select class="form-group selectpicker" id="tags" multiple>
-        </select>
-      </div>
-    </div>
-    <button type="submit" id="entry-submit" class="btn btn-info">Index Reference</button>
-  </form>
-</div>
+  <iframe src="./embedded.html" width="100%", height="795px" style="border:none; border-radius: 0px; margin: -10pt" ></iframe>
 <div>
   <hr />
   <p><em>Psst! Want to do this for your own repo? Enter your repository name and API key, generate your link, and bookmark it to load this as an overlay, anywhere!</em></p>

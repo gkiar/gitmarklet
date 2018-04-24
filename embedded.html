@@ -68,22 +68,41 @@
 
     // Update tags in form based on current repo
     entryForm.querySelector('#repo').addEventListener("blur", function(){
-      const httpRequest = new XMLHttpRequest();
-      httpRequest.onreadystatechange = updateLabelList;
-      httpRequest.open('GET', 'https://api.github.com/repos/'+ this.value +'/labels');
-      httpRequest.setRequestHeader('Accept', 'application/vnd.github.v3.raw+json');
-      httpRequest.send();
+      const httpRequest1 = new XMLHttpRequest();
+      httpRequest1.onreadystatechange = updateList;
+      httpRequest1.open('GET', 'https://api.github.com/repos/'+ this.value +'/labels');
+      httpRequest1.setRequestHeader('Accept', 'application/vnd.github.v3.raw+json');
+      httpRequest1.send();
 
-      function updateLabelList() {
-        if (httpRequest.readyState === XMLHttpRequest.DONE) {
-          if (httpRequest.status === 200) {
-            optlist = []
-            tagresp = JSON.parse(httpRequest.response)
-            for (var i=0; i < tagresp.length; i++) {
-              optlist = optlist.concat('<option>'+tagresp[i].name+'</option>')
+      const httpRequest2 = new XMLHttpRequest();
+      httpRequest2.onreadystatechange = updateList;
+      httpRequest2.open('GET', 'https://api.github.com/repos/'+ this.value +'/issues');
+      httpRequest2.setRequestHeader('Accept', 'application/vnd.github.v3.raw+json');
+      httpRequest2.send();
+
+      function updateList() {
+        if (this.readyState === XMLHttpRequest.DONE) {
+          if (this.status === 200) {
+            iterresp = JSON.parse(this.response)
+            if (iterresp[0].url.includes('issues')) {
+              picker = "issues"
+            } else {
+              picker = "tags"
             }
-            $('.selectpicker').html(optlist)
-            $('.selectpicker').selectpicker('refresh');
+
+            optlist = []
+            if (picker == "issues") {
+              optlist = optlist.concat('<option>N/A</option>')
+            }
+            for (var i=0; i < iterresp.length; i++) {
+              if (picker == "issues") {
+                optlist = optlist.concat('<option data-subtext="'+iterresp[i].title+'">'+iterresp[i].number+'</option>')
+              } else {
+                optlist = optlist.concat('<option>'+iterresp[i].name+'</option>')
+              }
+            }
+            $('.selectpicker#'+picker).html(optlist)
+            $('.selectpicker#'+picker).selectpicker('refresh');
           } else {
             alert('There was a problem requesting tags from this repository');
           }
@@ -103,13 +122,18 @@
     const repo = form.querySelector('#repo').value;
     const httpRequest = new XMLHttpRequest();
     const successMessage = document.querySelector('.form-success');
+    const existing = form.querySelector('#issues').value;
 
     if (!httpRequest) {
       return false;
     }
 
     httpRequest.onreadystatechange = createGitIssue;
-    httpRequest.open('POST', 'https://api.github.com/repos/'+ repo +'/issues?access_token='+ tok); // ###'); //Replace '###' with GitHub Personal Token
+    if (existing == "N/A") {
+      httpRequest.open('POST', 'https://api.github.com/repos/'+ repo +'/issues?access_token='+ tok);
+    } else {
+      httpRequest.open('POST', 'https://api.github.com/repos/'+ repo +'/issues/'+ existing +'/comments?access_token='+ tok);
+    }
     httpRequest.setRequestHeader('Accept', 'application/vnd.github.v3.raw+json');
     httpRequest.send(JSON.stringify(entry));
 
@@ -133,6 +157,7 @@
       paper = form.querySelector('#paper-name'),
       notes = form.querySelector('#notes'),
       url = form.querySelector('#url'),
+      existing = form.querySelector('#issues').value,
       taglist_ = form.querySelector('#tags')
 
     taglist = []
@@ -140,10 +165,12 @@
       taglist = taglist.concat(taglist_.selectedOptions[i].label)
     }
 
-    issueObj.title = "Paper: " + paper.value;
     issueObj.body = "URL: ["+ url.value +"](" + url.value + ") \n" +
                     notes.value + "\n";
-    issueObj.labels = taglist
+    if (existing == "N/A") {
+      issueObj.title = "Paper: " + paper.value;
+      issueObj.labels = taglist
+    }
     return issueObj;
   }
 
@@ -185,6 +212,14 @@
       <label for="tags">Tags</label>
       <div>
         <select class="form-group selectpicker" id="tags" multiple>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="issues">Existing Issue?</label>
+      <div>
+        <select class="form-group selectpicker" data-live-search="true" id="issues">
+        <option>N/A</option>
         </select>
       </div>
     </div>
