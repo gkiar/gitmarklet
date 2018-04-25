@@ -45,7 +45,9 @@
     document.getElementById('url').value = getParameterByName('url')
     document.getElementById('repo').value = getParameterByName('repo')
     document.getElementById('token').value = getParameterByName('token')
-
+    if (getParameterByName('button')) {
+      document.getElementById('closebutton').style.visibility = "visible"
+    }
     note_template = "### This paper does... \n\n### This paper does not...\n\n### Additional Notes?\n\n### Further Reading\n"
     document.getElementById('notes').value = note_template
 
@@ -185,7 +187,7 @@
   }
 </script>
 <div id="mainform" style="padding:10 20 0 20px">
-  <h3 style="display:inline">Github Paper Index</h3> 
+  <h3 style="display:inline">Github Paper Index</h3> <button type="button" class="close" id="closebutton" aria-label="Close" style="visibility:hidden"><span aria-hidden="true">&times;</span></button>
   <p class="form-success bg-success hidden">Form submitted successfully! See your notes <a id="issuelink" target="_blank" href="#">here</a>.</p>
   <form id="needs-validation" autocomplete="off">
     <div class="form-group">
