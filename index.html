@@ -44,7 +44,7 @@
     bookmarkletButton.addEventListener("click", function(event) {
       const tok = bookmarkletForm.querySelector('#token').value;
       const repo = bookmarkletForm.querySelector('#repo').value;
-      bookmarklet_url = "javascript:(function () {var jsCode = document.createElement('script');jsCode.setAttribute('src', 'https://gkiar.me/reading/bookmarklet.js');jsCode.setAttribute('token', 'TOKEN');jsCode.setAttribute('repo', 'REPO');jsCode.setAttribute('id', 'readerBookmarklet');document.body.appendChild(jsCode);}());"
+      bookmarklet_url = "javascript:(function () {var jsCode = document.createElement('script');jsCode.setAttribute('src', 'https://gkiar.me/gitmarklet/bookmarklet.js');jsCode.setAttribute('token', 'TOKEN');jsCode.setAttribute('repo', 'REPO');jsCode.setAttribute('id', 'readerBookmarklet');document.body.appendChild(jsCode);}());"
       bookmarklet_url = bookmarklet_url.replace(/TOKEN/, tok)
       bookmarklet_url = bookmarklet_url.replace(/REPO/, repo)
       document.getElementById('bookmark-url').setAttribute('href', bookmarklet_url)
