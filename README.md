@@ -1,4 +1,6 @@
-# Reading
+*Public Service Announcement: I renamed this project recently, so if you were using it, it is likely broken, and you should regenerate your link. Thanks!*
+
+# Gitmarklet
 
 Simple webform for creating structured and tagged Github issues from arbitrary users to arbitrary repos.
 
