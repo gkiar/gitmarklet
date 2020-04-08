@@ -132,11 +132,12 @@
 
     httpRequest.onreadystatechange = createGitIssue;
     if (existing == "N/A") {
-      httpRequest.open('POST', 'https://api.github.com/repos/'+ repo +'/issues?access_token='+ tok);
+      httpRequest.open('POST', 'https://api.github.com/repos/'+ repo +'/issues');
     } else {
-      httpRequest.open('POST', 'https://api.github.com/repos/'+ repo +'/issues/'+ existing +'/comments?access_token='+ tok);
+      httpRequest.open('POST', 'https://api.github.com/repos/'+ repo +'/issues/'+ existing +'/comments');
     }
     httpRequest.setRequestHeader('Accept', 'application/vnd.github.v3.raw+json');
+    httpRequest.setRequestHeader('Authorization','token '+ tok);
     httpRequest.send(JSON.stringify(entry));
 
     function createGitIssue() {
