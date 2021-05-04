@@ -48,7 +48,7 @@
     if (getParameterByName('button')) {
       document.getElementById('closebutton').style.visibility = "visible"
     }
-    note_template = "### This paper does... \n\n### This paper does not...\n\n### Additional Notes?\n\n### Further Reading\n"
+    note_template = ""
     document.getElementById('notes').value = note_template
 
     //Form event listener on Submit
@@ -171,7 +171,7 @@
     issueObj.body = "URL: ["+ url.value +"](" + url.value + ") \n" +
                     notes.value + "\n";
     if (existing == "N/A") {
-      issueObj.title = "Paper: " + paper.value;
+      issueObj.title = paper.value;
       issueObj.labels = taglist
     }
     return issueObj;
@@ -192,7 +192,7 @@
   <p class="form-success bg-success hidden">Form submitted successfully! See your notes <a id="issuelink" target="_blank" href="#">here</a>.</p>
   <form id="needs-validation" autocomplete="off">
     <div class="form-group">
-      <label for="paper-name">Paper title</label>
+      <label for="paper-name">Title</label>
       <input type="text" class="form-control" id="paper-name" placeholder="Title or shorthand identifier" required>
     </div>
     <div class="form-group">
